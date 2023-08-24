@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\ProjectController;
-use App\Http\Controllers\Guests\HomeController as GuestHomeController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Guest\HomeController as GuestHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,10 @@ Auth::routes();
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', [ AdminDashboardController::class , 'home'])->name('home');
-    Route::resource('/projects', ProjectController::class);
+    Route::get('/projects/deleted', [AdminProjectController::class, 'deletedIndex'] )->name('projects.deleted');
+    Route::post('/projects/deleted/{project}', [AdminPorojectController::class, 'restore'] )->name('projects.restore');
+    Route::delete('/projects/deleted/{project}', [AdminProjectController::class, 'obliterate'] )->name('projects.obliterate');
+    Route::resource('/projects', AdminProjectController::class);
 });
 
 Route::name('guest.')->group(function () {
