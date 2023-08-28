@@ -7,7 +7,7 @@
             <div class="card">
                 <h5 class="card-header"> ID: {{ $project->id }} ---- {{ $project->slug }}</h5>
 
-                @if (str_starts_with($project->image, 'http' ))
+                @if (str_starts_with($project->image, 'http'))
                     <img src="{{ $project->image }}" alt="{{ $project->title }}">
                 @else
                     <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">

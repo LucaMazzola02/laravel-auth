@@ -83,7 +83,7 @@ class ProjectController extends Controller
         $data = $request->validate([
 
             'title' => ['required', 'min:3', 'max:255', Rule::unique('projects')->ignore($project->id)],
-            'image' => ['image', 'max:512'],
+            'image' => ['image'],
             'content' => ['required', 'min:10'],
         ]);
 
@@ -128,6 +128,7 @@ class ProjectController extends Controller
     public function obliterate(string $slug)
     {
         $project = Project::onlyTrashed()->findOrFail($slug);
+        Storage::delete($project->image);
         $project->forceDelete();
 
         return redirect()->route('admin.projects.index');

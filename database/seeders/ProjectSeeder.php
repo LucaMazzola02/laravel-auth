@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Project;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
 class ProjectSeeder extends Seeder
@@ -15,12 +16,15 @@ class ProjectSeeder extends Seeder
     public function run(Faker $faker): void
     {
         for ($i=0; $i < 100; $i++) {
-            $newPost = new Project();
-            $newPost->title = ucfirst($faker->unique()->words(4, true));
-            $newPost->content = $faker->paragraphs(10, true);
-            $newPost->slug = $faker->slug();
-            $newPost->image = $faker->imageUrl(480, 360, 'post', true, 'posts', true, 'png');
-            $newPost->save();
+            $newProject = new Project();
+            $newProject->title = ucfirst($faker->unique()->words(4, true));
+            $newProject->content = $faker->paragraphs(10, true);
+            $newProject->slug = $faker->slug();
+            $newProject->image = $faker->imageUrl(480, 360, 'project', true, 'projects', true, 'png');
+            $newProject->slug = Str::of($newProject->title)->slug('-');
+            $newProject->save();
+            $newProject->slug = Str::of("$newProject->id " . $newProject->title)->slug('-');
+            $newProject->save();
         }
     }
 }
