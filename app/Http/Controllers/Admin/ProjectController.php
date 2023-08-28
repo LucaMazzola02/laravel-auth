@@ -1,10 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Project;
+
 use App\Http\Controllers\Controller;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProjectController extends Controller
 {
@@ -35,9 +40,14 @@ class ProjectController extends Controller
         //
         $data = $request->validate([
             'title' => ['required', 'unique:projects','min:3', 'max:255'],
-            'image' => ['url:https'],
+            'image' => ['image'],
             'content' => ['required', 'min:10'],
         ]);
+
+        if ($request->hasFile('image')){
+            $img_path = Storage::put('uploads/projects', $request['image']);
+            $data['image'] = $img_path;
+        }
 
         $data['slug'] = Str::of($data['title'])->slug('-');
         $newproject = Project::create($data);
@@ -61,7 +71,7 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         //
-        return view('admin.project.edit', compact('project'));
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -71,10 +81,18 @@ class ProjectController extends Controller
     {
         //
         $data = $request->validate([
+
             'title' => ['required', 'min:3', 'max:255', Rule::unique('projects')->ignore($project->id)],
-            'image' => ['url:https'],
+            'image' => ['image', 'max:512'],
             'content' => ['required', 'min:10'],
         ]);
+
+        if ($request->hasFile('image')){
+            Storage::delete($project->image);
+            $img_path = Storage::put('uploads/projects', $request['image']);
+            $data['image'] = $img_path;
+        }
+
         $data['slug'] = Str::of("$project->id " . $data['title'])->slug('-');
 
         $project->update($data);
@@ -94,8 +112,8 @@ class ProjectController extends Controller
 
 
     public function deletedIndex(){
+
             $projects = Project::onlyTrashed()->paginate(10);
-    
             return view('admin.projects.deleted', compact('projects'));
     }
 

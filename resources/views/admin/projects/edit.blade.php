@@ -25,7 +25,7 @@
                     <label for="image" class="form-label">
                         Image
                     </label>
-                    <input type="text" class="form-control" id="image" placeholder="https://ginetto-va-in-campagna-col-cappello.jpg" name="image" value="{{  old( 'image' , $project->image) }}">
+                    <input type="file" name="image" id="image" class="form-control" placeholder="Upload your image" value="{{ old('image', '') }}">
                 </div>
 
                 @error('content')
@@ -35,9 +35,7 @@
                     <label for="content" class="form-label">
                         Content
                     </label>
-                    <textarea class="form-control" id="content" rows="7" name="content">
-                        {{ old( 'content' , $project->content) }}
-                    </textarea>
+                    <textarea class="form-control" id="content" rows="7" name="content">{{ old( 'content' , $project->content) }}</textarea>
                 </div>
 
                 <div class="mb-3">

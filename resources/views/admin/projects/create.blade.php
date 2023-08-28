@@ -4,7 +4,7 @@
 <div class="container" id="projects-container">
     <div class="row justify-content-center">
         <div class="col-12">
-            <form action="{{ route('admin.projects.store') }}" method="POST">
+            <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 @error('title')
@@ -14,7 +14,7 @@
                     <label for="exampleFormControlInput1" class="form-label">
                         Title
                     </label>
-                    <input type="text" class="form-control" id="title" placeholder="Insert your project's title" name="title">
+                    <input type="text" class="form-control" id="title" placeholder="Insert your post's title" name="title"  value="{{ old('title', '') }}">
                 </div>
 
                 @error('image')
@@ -24,7 +24,7 @@
                     <label for="image" class="form-label">
                         Image
                     </label>
-                    <input type="text" class="form-control" id="image" placeholder="https://ginetto-va-in-campagna-col-cappello.jpg" name="image">
+                    <input type="file" name="image" id="image" class="form-control" placeholder="Upload your image" value="{{ old('image', '') }}">
                 </div>
 
                 @error('content')
@@ -34,8 +34,7 @@
                     <label for="content" class="form-label">
                         Content
                     </label>
-                    <textarea class="form-control" id="content" rows="7" name="content">
-                    </textarea>
+                    <textarea class="form-control" id="content" rows="7" name="content">{{ old('content', '') }}</textarea>
                 </div>
 
                 <div class="mb-3">
